@@ -10,12 +10,12 @@
 #include "../include/ui.h"
 #include "raylib.h"
 
-void ui_draw_display(const Calc *c, Rectangle area, int fontSize){
+void ui_draw_display(const Calc *calc, Rectangle area, int fontSize){
     DrawRectangleRec(area, LIGHTGRAY);
     DrawRectangleLinesEx(area, 2, BLACK);
-    int tw = MeasureText(c->display, fontSize);
+    int tw = MeasureText(calc->display, fontSize);
     float pad = 16.0f;
-    DrawText(c->display,
+    DrawText(calc->display,
              (int)(area.x + area.width - tw - pad),
              (int)(area.y + area.height - fontSize),
              fontSize, BLACK);

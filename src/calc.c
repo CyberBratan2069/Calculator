@@ -1,6 +1,12 @@
 /***********************************************************************************************************************
- * calc.c – Implementierung der Taschenrechner-Logik mit Komma-Anzeige
+ * @author Christian Reiswich
+ * @date 2021-01-25
+ * @version 1.0
+ * @brief Raylib Calculator
+ * @details
  **********************************************************************************************************************/
+
+
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
@@ -136,6 +142,7 @@ void calc_press_ac(Calc *c) {
     c->enteringNew = true;
     set_display(c, "0");
 }
+
 
 void calc_press_sign(Calc *c) {
     if (strcmp(c->display, "0") == 0 || strcmp(c->display, "0,0") == 0) return;
