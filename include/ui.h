@@ -1,0 +1,32 @@
+/***********************************************************************************************************************
+ * @author Christian Reiswich
+ * @date 2021-01-25
+ * @version 1.0
+ * @brief Raylib Calculator
+ * @details
+ **********************************************************************************************************************/
+
+#ifndef RAYLIBPROJEKT_UI_H
+#define RAYLIBPROJEKT_UI_H
+
+#pragma once
+#include "raylib.h"
+#include "calc.h"
+
+
+void ui_draw_display(const Calc *c, Rectangle area, int fontSize);
+
+
+typedef struct {
+    Color acBase, signBase, pctBase;
+    Color numBase, optBase, dotBase;
+    Color opBase, eqBase;
+    Color txtDark, txtLight;
+    Color bg, displayBg, displayBorder;
+} Theme;
+
+Theme ui_default_theme(void);
+
+
+
+#endif //RAYLIBPROJEKT_UI_H
