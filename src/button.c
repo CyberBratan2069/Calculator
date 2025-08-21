@@ -9,7 +9,8 @@
 #include "../include/button.h"
 
 static unsigned char clampc(float v){
-    if(v < 0) v = 0; if(v > 255) v = 255;
+    if(v < 0) v = 0;
+    if(v > 255) v = 255;
     return (unsigned char)v;
 }
 

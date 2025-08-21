@@ -24,11 +24,23 @@ void ui_draw_display(const Calc *calc, Rectangle area, int fontSize){
 
 Theme ui_default_theme(void){
     Theme t = {
-            .acBase=GRAY, .signBase=GRAY, .pctBase=GRAY,
-            .numBase=DARKGRAY, .optBase=DARKGRAY, .dotBase=DARKGRAY,
-            .opBase=ORANGE, .eqBase=ORANGE,
-            .txtDark=RAYWHITE, .txtLight=RAYWHITE,
-            .bg=RAYWHITE, .displayBg=LIGHTGRAY, .displayBorder=BLACK
+            .acBase  =GRAY,
+            .signBase=GRAY,
+            .pctBase =GRAY,
+
+            .numBase =DARKGRAY,
+            .optBase =DARKGRAY,
+            .dotBase =DARKGRAY,
+
+            .opBase  =ORANGE,
+            .eqBase  =ORANGE,
+
+            .txtDark =RAYWHITE,
+            .txtLight=RAYWHITE,
+            .bg      =RAYWHITE,
+
+            .displayBg    =LIGHTGRAY,
+            .displayBorder=BLACK
     };
     return t;
 }

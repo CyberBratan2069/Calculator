@@ -86,6 +86,7 @@ void calc_init(Calc *calc) {
     set_display(calc, "0");
 }
 
+
 void calc_press_digit(Calc *calc, char digit) {
     if (digit < '0' || digit > '9') return;
     append_digit(calc, digit);
