@@ -29,5 +29,6 @@ void calc_press_eq   (Calc *calc);
 void calc_press_ac   (Calc *calc);
 void calc_press_sign (Calc *calc);
 void calc_press_pct  (Calc *calc);
+void calc_press_backspace(Calc *calc);
 
 #endif //RAYLIBPROJEKT_CALC_H

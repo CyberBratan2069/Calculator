@@ -36,5 +36,4 @@ typedef struct {
 Theme ui_default_theme(void);
 
 
-
 #endif //RAYLIBPROJEKT_UI_H

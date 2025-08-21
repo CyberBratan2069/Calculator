@@ -6,11 +6,11 @@
  * @details
  **********************************************************************************************************************/
 
+#include "../include/calc.h"
 
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include "../include/calc.h"
 
 
 static double parse_number(const char *str) {
@@ -162,4 +162,25 @@ void calc_press_pct(Calc *calc) {
     cur /= 100.0;
     format_number(calc->display, sizeof(calc->display), cur);
     calc->enteringNew = true;
+}
+
+
+void calc_press_backspace(Calc *calc) {
+    if (strcmp(calc->display, "0") == 0 || strcmp(calc->display, "Error") == 0) {
+        calc_init(calc);
+        return;
+    }
+
+    if (calc->enteringNew) calc->enteringNew = false;
+
+    size_t len = strlen(calc->display);
+    if (len == 0) { set_display(calc, "0"); calc->enteringNew = true; return; }
+
+    calc->display[len - 1] = '\0';
+
+    if (calc->display[0] == '\0' || (calc->display[0] == '-' && calc->display[1] == '\0')) {
+        set_display(calc, "0");
+        calc->enteringNew = true;
+        return;
+    }
 }
