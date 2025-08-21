@@ -21,13 +21,13 @@ typedef struct {
     char   display[64];
 } Calc;
 
-void calc_init       (Calc *c);
-void calc_press_digit(Calc *c, char digit);
-void calc_press_dot  (Calc *c);
-void calc_press_op   (Calc *c, char op);
-void calc_press_eq   (Calc *c);
-void calc_press_ac   (Calc *c);
-void calc_press_sign (Calc *c);
-void calc_press_pct  (Calc *c);
+void calc_init       (Calc *calc);
+void calc_press_digit(Calc *calc, char digit);
+void calc_press_dot  (Calc *calc);
+void calc_press_op   (Calc *calc, char op);
+void calc_press_eq   (Calc *calc);
+void calc_press_ac   (Calc *calc);
+void calc_press_sign (Calc *calc);
+void calc_press_pct  (Calc *calc);
 
 #endif //RAYLIBPROJEKT_CALC_H

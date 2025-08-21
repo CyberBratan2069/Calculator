@@ -14,7 +14,7 @@
 #include "calc.h"
 
 
-void ui_draw_display(const Calc *c, Rectangle area, int fontSize);
+void ui_draw_display(const Calc *calc, Rectangle area, int fontSize);
 
 
 typedef struct {

@@ -26,116 +26,116 @@ static double do_calc(double left, double right, char op) {
 }
 
 
-static inline void display_set(char *dst, size_t len, const char *txt){
+static inline void display_set(char *str, size_t len, const char *txt){
     if(len==0) return;
-    snprintf(dst, len, "%s", txt);
-    dst[len-1] = '\0';
+    snprintf(str, len, "%s", txt);
+    str[len-1] = '\0';
 }
 
 
-static inline bool display_append(char *dst, size_t len, char c){
-    size_t L = strlen(dst);
+static inline bool display_append(char *str, size_t len, char c){
+    size_t L = strlen(str);
     if(L+1 >= len) return false;
-    dst[L]   = c;
-    dst[L+1] = '\0';
+    str[L]   = c;
+    str[L+1] = '\0';
     return true;
 }
 
 
-void calc_init(Calc *c) {
-    c->acc = 0.0;
-    c->pending = 0;
-    c->enteringNew = true;
-    display_set(c->display, sizeof(c->display), "0");
+void calc_init(Calc *calc) {
+    calc->acc = 0.0;
+    calc->pending = 0;
+    calc->enteringNew = true;
+    display_set(calc->display, sizeof(calc->display), "0");
 }
 
 
-void calc_press_digit(Calc *c, char digit) {
-    if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
-    if(!c->enteringNew){
-        display_set(c->display, sizeof(c->display), "0");
-        c->enteringNew = true;
+void calc_press_digit(Calc *calc, char digit) {
+    if(strcmp(calc->display, "ERROR")==0) display_set(calc->display, sizeof(calc->display), "0");
+    if(!calc->enteringNew){
+        display_set(calc->display, sizeof(calc->display), "0");
+        calc->enteringNew = true;
     }
-    if(strlen(c->display)==1 && c->display[0]=='0'){
-        c->display[0] = digit;
-        c->display[1] = '\0';
+    if(strlen(calc->display)==1 && calc->display[0]=='0'){
+        calc->display[0] = digit;
+        calc->display[1] = '\0';
     } else {
-        display_append(c->display, sizeof(c->display), digit);
+        display_append(calc->display, sizeof(calc->display), digit);
     }
 }
 
 
-void calc_press_dot(Calc *c) {
-    if(strcmp(c->display, "ERROR")==0 || !c->enteringNew) {
-        display_set(c->display, sizeof(c->display), "0.");
-        c->enteringNew = true;
+void calc_press_dot(Calc *calc) {
+    if(strcmp(calc->display, "ERROR")==0 || !calc->enteringNew) {
+        display_set(calc->display, sizeof(calc->display), "0.");
+        calc->enteringNew = true;
         return;
     }
-    if(!strchr(c->display, '.')) display_append(c->display, sizeof(c->display), '.');
+    if(!strchr(calc->display, '.')) display_append(calc->display, sizeof(calc->display), '.');
 }
 
 
-void calc_press_op(Calc *c, char op) {
-    if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
-    double val = strtod(c->display, NULL);
+void calc_press_op(Calc *calc, char op) {
+    if(strcmp(calc->display, "ERROR")==0) display_set(calc->display, sizeof(calc->display), "0");
+    double val = strtod(calc->display, NULL);
 
-    if(c->pending && c->enteringNew) {
-        double r = do_calc(c->acc, val, c->pending);
+    if(calc->pending && calc->enteringNew) {
+        double r = do_calc(calc->acc, val, calc->pending);
         if(isnan(r)) {
-            display_set(c->display, sizeof(c->display), "ERROR");
-            c->acc = 0.0; c->pending = 0;
+            display_set(calc->display, sizeof(calc->display), "ERROR");
+            calc->acc = 0.0; calc->pending = 0;
         } else {
-            snprintf(c->display, sizeof(c->display), "%.15g", r);
-            c->acc = r;
+            snprintf(calc->display, sizeof(calc->display), "%.15g", r);
+            calc->acc = r;
         }
-    } else if(!c->pending) {
-        c->acc = val;
+    } else if(!calc->pending) {
+        calc->acc = val;
     }
 
-    c->pending = op;
-    c->enteringNew = false;
+    calc->pending = op;
+    calc->enteringNew = false;
 }
 
 
-void calc_press_eq(Calc *c) {
-    if(!c->pending) return;
-    if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
-    double right = strtod(c->display, NULL);
-    double r = do_calc(c->acc, right, c->pending);
+void calc_press_eq(Calc *calc) {
+    if(!calc->pending) return;
+    if(strcmp(calc->display, "ERROR")==0) display_set(calc->display, sizeof(calc->display), "0");
+    double right = strtod(calc->display, NULL);
+    double r = do_calc(calc->acc, right, calc->pending);
     if(isnan(r)) {
-        display_set(c->display, sizeof(c->display), "ERROR");
-        c->acc = 0.0;
+        display_set(calc->display, sizeof(calc->display), "ERROR");
+        calc->acc = 0.0;
     } else {
-        snprintf(c->display, sizeof(c->display), "%.15g", r);
-        c->acc = r;
+        snprintf(calc->display, sizeof(calc->display), "%.15g", r);
+        calc->acc = r;
     }
-    c->pending = 0;
-    c->enteringNew = true;
+    calc->pending = 0;
+    calc->enteringNew = true;
 }
 
 
-void calc_press_ac(Calc *c) {
-    calc_init(c);
+void calc_press_ac(Calc *calc) {
+    calc_init(calc);
 }
 
 
-void calc_press_sign(Calc *c) {
-    if(strcmp(c->display, "ERROR")==0){ display_set(c->display, sizeof(c->display), "0"); return; }
-    if(c->display[0]=='-'){
-        memmove(c->display, c->display+1, strlen(c->display));
+void calc_press_sign(Calc *calc) {
+    if(strcmp(calc->display, "ERROR")==0){ display_set(calc->display, sizeof(calc->display), "0"); return; }
+    if(calc->display[0]=='-'){
+        memmove(calc->display, calc->display+1, strlen(calc->display));
     } else {
-        size_t L = strlen(c->display);
-        if(L+1 < sizeof(c->display)){
-            memmove(c->display+1, c->display, L+1);
-            c->display[0] = '-';
+        size_t L = strlen(calc->display);
+        if(L+1 < sizeof(calc->display)){
+            memmove(calc->display+1, calc->display, L+1);
+            calc->display[0] = '-';
         }
     }
 }
 
 
-void calc_press_pct(Calc *c) {
-    if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
-    double v = strtod(c->display, NULL) / 100.0;
-    snprintf(c->display, sizeof(c->display), "%.15g", v);
-    c->enteringNew = true;
+void calc_press_pct(Calc *calc) {
+    if(strcmp(calc->display, "ERROR")==0) display_set(calc->display, sizeof(calc->display), "0");
+    double v = strtod(calc->display, NULL) / 100.0;
+    snprintf(calc->display, sizeof(calc->display), "%.15g", v);
+    calc->enteringNew = true;
 }
