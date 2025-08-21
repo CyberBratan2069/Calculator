@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <math.h>
 
+
 static double do_calc(double left, double right, char op) {
     switch(op){
         case '+': return left + right;
@@ -24,11 +25,13 @@ static double do_calc(double left, double right, char op) {
     }
 }
 
+
 static inline void display_set(char *dst, size_t len, const char *txt){
     if(len==0) return;
     snprintf(dst, len, "%s", txt);
     dst[len-1] = '\0';
 }
+
 
 static inline bool display_append(char *dst, size_t len, char c){
     size_t L = strlen(dst);
@@ -38,14 +41,16 @@ static inline bool display_append(char *dst, size_t len, char c){
     return true;
 }
 
-void calc_init(Calc *c){
+
+void calc_init(Calc *c) {
     c->acc = 0.0;
     c->pending = 0;
     c->enteringNew = true;
     display_set(c->display, sizeof(c->display), "0");
 }
 
-void calc_press_digit(Calc *c, char digit){
+
+void calc_press_digit(Calc *c, char digit) {
     if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
     if(!c->enteringNew){
         display_set(c->display, sizeof(c->display), "0");
@@ -59,6 +64,7 @@ void calc_press_digit(Calc *c, char digit){
     }
 }
 
+
 void calc_press_dot(Calc *c) {
     if(strcmp(c->display, "ERROR")==0 || !c->enteringNew) {
         display_set(c->display, sizeof(c->display), "0.");
@@ -67,6 +73,7 @@ void calc_press_dot(Calc *c) {
     }
     if(!strchr(c->display, '.')) display_append(c->display, sizeof(c->display), '.');
 }
+
 
 void calc_press_op(Calc *c, char op) {
     if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
@@ -89,6 +96,7 @@ void calc_press_op(Calc *c, char op) {
     c->enteringNew = false;
 }
 
+
 void calc_press_eq(Calc *c) {
     if(!c->pending) return;
     if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");
@@ -105,8 +113,11 @@ void calc_press_eq(Calc *c) {
     c->enteringNew = true;
 }
 
+
 void calc_press_ac(Calc *c) {
-    calc_init(c); }
+    calc_init(c);
+}
+
 
 void calc_press_sign(Calc *c) {
     if(strcmp(c->display, "ERROR")==0){ display_set(c->display, sizeof(c->display), "0"); return; }
@@ -120,6 +131,7 @@ void calc_press_sign(Calc *c) {
         }
     }
 }
+
 
 void calc_press_pct(Calc *c) {
     if(strcmp(c->display, "ERROR")==0) display_set(c->display, sizeof(c->display), "0");

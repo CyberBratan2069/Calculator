@@ -24,7 +24,7 @@ typedef struct {
 void calc_init       (Calc *c);
 void calc_press_digit(Calc *c, char digit);
 void calc_press_dot  (Calc *c);
-void calc_press_op   (Calc *c, char op);     // '+','-','*','/'
+void calc_press_op   (Calc *c, char op);
 void calc_press_eq   (Calc *c);
 void calc_press_ac   (Calc *c);
 void calc_press_sign (Calc *c);
