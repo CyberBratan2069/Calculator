@@ -21,6 +21,7 @@ void ui_draw_display(const Calc *calc, Rectangle area, int fontSize){
              fontSize, BLACK);
 }
 
+
 Theme ui_default_theme(void){
     Theme t = {
             .acBase=GRAY, .signBase=GRAY, .pctBase=GRAY,
