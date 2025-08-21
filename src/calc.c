@@ -13,11 +13,11 @@
 #include "../include/calc.h"
 
 
-static double parse_number(const char *s) {
+static double parse_number(const char *str) {
     char tmp[128];
-    size_t n = strlen(s);
+    size_t n = strlen(str);
     if (n >= sizeof(tmp)) n = sizeof(tmp) - 1;
-    memcpy(tmp, s, n);
+    memcpy(tmp, str, n);
     tmp[n] = '\0';
     for (char *p = tmp; *p; ++p) if (*p == ',') *p = '.';
     char *end = NULL;
@@ -39,32 +39,32 @@ static void format_number(char *out, size_t cap, double v) {
 }
 
 
-static void set_display(Calc *c, const char *text) {
-    snprintf(c->display, sizeof(c->display), "%s", text);
+static void set_display(Calc *calc, const char *text) {
+    snprintf(calc->display, sizeof(calc->display), "%s", text);
 }
 
 
-static void append_digit(Calc *c, char d) {
-    if (c->enteringNew) { set_display(c, "0"); c->enteringNew = false; }
-    size_t len = strlen(c->display);
-    if (len + 1 >= sizeof(c->display)) return;
-    if (len == 1 && c->display[0] == '0') {
-        c->display[0] = d;
-        c->display[1] = '\0';
+static void append_digit(Calc *calc, char d) {
+    if (calc->enteringNew) { set_display(calc, "0"); calc->enteringNew = false; }
+    size_t len = strlen(calc->display);
+    if (len + 1 >= sizeof(calc->display)) return;
+    if (len == 1 && calc->display[0] == '0') {
+        calc->display[0] = d;
+        calc->display[1] = '\0';
     } else {
-        c->display[len] = d;
-        c->display[len + 1] = '\0';
+        calc->display[len] = d;
+        calc->display[len + 1] = '\0';
     }
 }
 
 
-static void append_comma(Calc *c) {
-    if (c->enteringNew) { set_display(c, "0"); c->enteringNew = false; }
-    if (strchr(c->display, ',') != NULL) return;
-    size_t len = strlen(c->display);
-    if (len + 1 >= sizeof(c->display)) return;
-    c->display[len] = ',';
-    c->display[len + 1] = '\0';
+static void append_comma(Calc *calc) {
+    if (calc->enteringNew) { set_display(calc, "0"); calc->enteringNew = false; }
+    if (strchr(calc->display, ',') != NULL) return;
+    size_t len = strlen(calc->display);
+    if (len + 1 >= sizeof(calc->display)) return;
+    calc->display[len] = ',';
+    calc->display[len + 1] = '\0';
 }
 
 
@@ -79,89 +79,86 @@ static double eval(double left, double right, char op) {
 }
 
 
-void calc_init(Calc *c) {
-    c->acc = 0.0;
-    c->pending = 0;
-    c->enteringNew = true;
-    set_display(c, "0");
+void calc_init(Calc *calc) {
+    calc->acc = 0.0;
+    calc->pending = 0;
+    calc->enteringNew = true;
+    set_display(calc, "0");
 }
 
-void calc_press_digit(Calc *c, char digit) {
+void calc_press_digit(Calc *calc, char digit) {
     if (digit < '0' || digit > '9') return;
-    append_digit(c, digit);
+    append_digit(calc, digit);
 }
 
 
-void calc_press_dot(Calc *c) {
-    append_comma(c);
+void calc_press_dot(Calc *calc) {
+    append_comma(calc);
 }
 
 
-void calc_press_op(Calc *c, char op) {
+void calc_press_op(Calc *calc, char op) {
     if (op != '+' && op != '-' && op != '*' && op != '/') return;
-    double cur = parse_number(c->display);
+    double cur = parse_number(calc->display);
 
-    if (c->pending && !c->enteringNew) {
-        double res = eval(c->acc, cur, c->pending);
+    if (calc->pending && !calc->enteringNew) {
+        double res = eval(calc->acc, cur, calc->pending);
         if (isnan(res)) {
-            set_display(c, "Error");
-            c->acc = 0.0;
-            c->pending = 0;
-            c->enteringNew = true;
+            set_display(calc, "Error");
+            calc->acc = 0.0;
+            calc->pending = 0;
+            calc->enteringNew = true;
             return;
         }
-        c->acc = res;
-        format_number(c->display, sizeof(c->display), res);
-    } else if (!c->pending) {
-        c->acc = cur;
+        calc->acc = res;
+        format_number(calc->display, sizeof(calc->display), res);
+    } else if (!calc->pending) {
+        calc->acc = cur;
     }
-    c->pending = op;
-    c->enteringNew = true;
+    calc->pending = op;
+    calc->enteringNew = true;
 }
 
 
-void calc_press_eq(Calc *c) {
-    if (!c->pending) return;
-    double right = parse_number(c->display);
-    double res = eval(c->acc, right, c->pending);
+void calc_press_eq(Calc *calc) {
+    if (!calc->pending) return;
+    double right = parse_number(calc->display);
+    double res = eval(calc->acc, right, calc->pending);
     if (isnan(res)) {
-        set_display(c, "Error");
-        c->acc = 0.0;
+        set_display(calc, "Error");
+        calc->acc = 0.0;
     } else {
-        c->acc = res;
-        format_number(c->display, sizeof(c->display), res);
+        calc->acc = res;
+        format_number(calc->display, sizeof(calc->display), res);
     }
-    c->pending = 0;
-    c->enteringNew = true;
+    calc->pending = 0;
+    calc->enteringNew = true;
 }
 
 
-void calc_press_ac(Calc *c) {
-    c->acc = 0.0;
-    c->pending = 0;
-    c->enteringNew = true;
-    set_display(c, "0");
+void calc_press_ac(Calc *calc) {
+    calc_init(calc);
 }
 
 
-void calc_press_sign(Calc *c) {
-    if (strcmp(c->display, "0") == 0 || strcmp(c->display, "0,0") == 0) return;
-    if (c->display[0] == '-') {
-        size_t len = strlen(c->display);
-        memmove(c->display, c->display + 1, len); // inkl. '\0'
+void calc_press_sign(Calc *calc) {
+    if (strcmp(calc->display, "0") == 0 || strcmp(calc->display, "0,0") == 0) return;
+    if (calc->display[0] == '-') {
+        size_t len = strlen(calc->display);
+        memmove(calc->display, calc->display + 1, len);
     } else {
-        size_t len = strlen(c->display);
-        if (len + 1 < sizeof(c->display)) {
-            memmove(c->display + 1, c->display, len + 1);
-            c->display[0] = '-';
+        size_t len = strlen(calc->display);
+        if (len + 1 < sizeof(calc->display)) {
+            memmove(calc->display + 1, calc->display, len + 1);
+            calc->display[0] = '-';
         }
     }
 }
 
 
-void calc_press_pct(Calc *c) {
-    double cur = parse_number(c->display);
+void calc_press_pct(Calc *calc) {
+    double cur = parse_number(calc->display);
     cur /= 100.0;
-    format_number(c->display, sizeof(c->display), cur);
-    c->enteringNew = true;
+    format_number(calc->display, sizeof(calc->display), cur);
+    calc->enteringNew = true;
 }

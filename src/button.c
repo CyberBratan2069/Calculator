@@ -13,11 +13,11 @@ static unsigned char clampc(float v){
     return (unsigned char)v;
 }
 
-Color btn_shade(Color c, float f){
-    Color o = c;
-    o.r = clampc(c.r * f);
-    o.g = clampc(c.g * f);
-    o.b = clampc(c.b * f);
+Color btn_shade(Color color, float f){
+    Color o = color;
+    o.r = clampc(color.r * f);
+    o.g = clampc(color.g * f);
+    o.b = clampc(color.b * f);
     return o;
 }
 

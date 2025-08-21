@@ -14,14 +14,14 @@
 #include <stdbool.h>
 
 typedef struct {
-    Rectangle bounds;
+    Rectangle   bounds;
     const char *label;
-    Color baseColor;
-    Color textColor;
+    Color       baseColor;
+    Color       textColor;
 } Button;
 
-Color  btn_shade(Color color, float factor);
-bool   btn_draw(Button *button);
+Color btn_shade(Color color, float factor);
+bool  btn_draw (Button *button);
 
 
 #endif //RAYLIBPROJEKT_BUTTON_H

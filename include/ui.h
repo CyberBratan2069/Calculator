@@ -18,11 +18,19 @@ void ui_draw_display(const Calc *calc, Rectangle area, int fontSize);
 
 
 typedef struct {
-    Color acBase, signBase, pctBase;
-    Color numBase, optBase, dotBase;
-    Color opBase, eqBase;
-    Color txtDark, txtLight;
-    Color bg, displayBg, displayBorder;
+    Color acBase;
+    Color signBase;
+    Color pctBase;
+    Color numBase;
+    Color optBase;
+    Color dotBase;
+    Color opBase;
+    Color eqBase;
+    Color txtDark;
+    Color txtLight;
+    Color bg;
+    Color displayBg;
+    Color displayBorder;
 } Theme;
 
 Theme ui_default_theme(void);
