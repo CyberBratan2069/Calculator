@@ -10,6 +10,22 @@
 #include "../include/ui.h"
 #include "raylib.h"
 
+
+
+
+/**
+ * @brief Draws the calculator display UI.
+ *
+ * This function renders the display area of the calculator UI, including
+ * the background, border, and the text content of the display string.
+ *
+ * @param calc A pointer to the Calc structure containing the current
+ *             state of the calculator, including the display string
+ *             to render.
+ * @param area A Rectangle structure specifying the position and size
+ *             of the display area to be drawn.
+ * @param fontSize The font size to be used for rendering the display text.
+ */
 void ui_draw_display(const Calc *calc, Rectangle area, int fontSize){
     DrawRectangleRec(area, LIGHTGRAY);
     DrawRectangleLinesEx(area, 2, BLACK);
@@ -22,14 +38,24 @@ void ui_draw_display(const Calc *calc, Rectangle area, int fontSize){
 }
 
 
-Theme ui_default_theme(void){
+/**
+ * @brief Creates and returns the default theme configuration for the UI.
+ *
+ * This function initializes a Theme structure with preset color values for
+ * various components of the user interface. The settings include base colors
+ * for different sections such as numerical areas, operators, text, and background,
+ * along with display background and border colors.
+ *
+ * @return A Theme struct containing the default UI theme configuration.
+ */
+Theme ui_default_theme(void) {
     Theme t = {
             .acBase  =GRAY,
             .signBase=GRAY,
             .pctBase =GRAY,
+            .optBase =GRAY,
 
             .numBase =DARKGRAY,
-            .optBase =DARKGRAY,
             .dotBase =DARKGRAY,
 
             .opBase  =ORANGE,
