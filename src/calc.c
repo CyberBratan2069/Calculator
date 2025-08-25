@@ -80,9 +80,10 @@ static double eval(double left, double right, char op) {
 
 
 void calc_init(Calc *calc) {
-    calc->acc = 0.0;
-    calc->pending = 0;
+    calc->acc         = 0.0;
+    calc->pending     = 0;
     calc->enteringNew = true;
+    calc->lastWasEq   = false;
     set_display(calc, "0");
 }
 
@@ -90,6 +91,9 @@ void calc_init(Calc *calc) {
 void calc_press_digit(Calc *calc, char digit) {
     if (digit < '0' || digit > '9') return;
     append_digit(calc, digit);
+
+    calc->enteringNew = false;
+    calc->lastWasEq   = false;
 }
 
 
@@ -116,24 +120,27 @@ void calc_press_op(Calc *calc, char op) {
     } else if (!calc->pending) {
         calc->acc = cur;
     }
-    calc->pending = op;
+    calc->pending     = op;
     calc->enteringNew = true;
+    calc->lastWasEq   = false;
 }
 
 
 void calc_press_eq(Calc *calc) {
     if (!calc->pending) return;
     double right = parse_number(calc->display);
-    double res = eval(calc->acc, right, calc->pending);
-    if (isnan(res)) {
+    double result = eval(calc->acc, right, calc->pending);
+    if (isnan(result)) {
         set_display(calc, "Error");
         calc->acc = 0.0;
     } else {
-        calc->acc = res;
-        format_number(calc->display, sizeof(calc->display), res);
+        calc->acc = result;
+        format_number(calc->display, sizeof(calc->display), result);
     }
-    calc->pending = 0;
+
+    calc->pending     = 0;
     calc->enteringNew = true;
+    calc->lastWasEq   = true;
 }
 
 
@@ -154,6 +161,8 @@ void calc_press_sign(Calc *calc) {
             calc->display[0] = '-';
         }
     }
+
+
 }
 
 

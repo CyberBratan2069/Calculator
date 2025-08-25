@@ -53,7 +53,7 @@ int main(void) {
         Rectangle displayRect = (Rectangle){0, 0, 400, 140};
         ui_draw_display(&calc, displayRect, 48);
 
-        bool showBack = (strcmp(calc.display, "0") != 0) && (strcmp(calc.display, "Error") != 0);
+        bool showBack = (strcmp(calc.display, "0") != 0) && (strcmp(calc.display, "Error") != 0 && calc.lastWasEq == false);
 
         if (showBack) {
             if (btn_draw(&btnBack)) calc_press_backspace(&calc);

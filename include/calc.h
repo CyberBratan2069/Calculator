@@ -19,7 +19,10 @@ typedef struct {
     char   pending;
     bool   enteringNew;
     char   display[64];
-} Calc;
+    bool   lastWasEq;
+}
+
+Calc;
 
 void calc_init       (Calc *calc);
 void calc_press_digit(Calc *calc, char digit);
