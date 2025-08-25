@@ -24,9 +24,16 @@ typedef struct {
 
 Calc;
 
+double parse_number (const char *str);
+void   format_number(char *outStr, size_t cap, double value);
+void   set_display  (Calc *calc, const char *text);
+void   append_digit (Calc *calc, char value);
+void   append_comma (Calc *calc);
+double eval         (double left, double right, char op);
+
 void calc_init       (Calc *calc);
 void calc_press_digit(Calc *calc, char digit);
-void calc_press_dot  (Calc *calc);
+void calc_press_comma(Calc *calc);
 void calc_press_op   (Calc *calc, char op);
 void calc_press_eq   (Calc *calc);
 void calc_press_ac   (Calc *calc);

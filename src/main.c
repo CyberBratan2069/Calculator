@@ -43,8 +43,9 @@ int main(void) {
 
     Button btnOpt  = { .bounds=(Rectangle){0,   540, 100, 100}, .label="Opt", .baseColor=theme.optBase,  .textColor=theme.txtLight};
     Button btn0    = { .bounds=(Rectangle){100, 540, 100, 100}, .label="0",   .baseColor=theme.numBase,  .textColor=theme.txtDark};
-    Button btnDot  = { .bounds=(Rectangle){200, 540, 100, 100}, .label=".",   .baseColor=theme.dotBase,  .textColor=theme.txtDark};
+    Button btnDot  = { .bounds=(Rectangle){200, 540, 100, 100}, .label=",",   .baseColor=theme.dotBase,  .textColor=theme.txtDark};
     Button btnEq   = { .bounds=(Rectangle){300, 540, 100, 100}, .label="=",   .baseColor=theme.eqBase,   .textColor=theme.txtLight};
+
 
     while(!WindowShouldClose()){
         BeginDrawing();
@@ -81,7 +82,7 @@ int main(void) {
         if(btn_draw(&btn3)) calc_press_digit(&calc, '3');
         if(btn_draw(&btn0)) calc_press_digit(&calc, '0');
 
-        if(btn_draw(&btnDot)) calc_press_dot(&calc);
+        if(btn_draw(&btnDot)) calc_press_comma(&calc);
         if(btn_draw(&btnEq))  calc_press_eq(&calc);
 
         btn_draw(&btnOpt);
