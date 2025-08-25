@@ -13,62 +13,89 @@
 #include <math.h>
 
 
-static double parse_number(const char *str) {
+double parse_number(const char *str) {
     char tmp[128];
-    size_t n = strlen(str);
-    if (n >= sizeof(tmp)) n = sizeof(tmp) - 1;
-    memcpy(tmp, str, n);
-    tmp[n] = '\0';
-    for (char *p = tmp; *p; ++p) if (*p == ',') *p = '.';
-    char *end = NULL;
-    double v = strtod(tmp, &end);
-    if (end == tmp) return 0.0;
-    return v;
-}
+    size_t strLength = strlen(str);
 
-
-static void format_number(char *out, size_t cap, double v) {
-    char tmp[128];
-    snprintf(tmp, sizeof(tmp), "%.15g", v);
-    size_t n = strlen(tmp);
-    if (n + 1 > cap) n = cap - 1;
-    for (size_t i = 0; i < n; ++i) {
-        out[i] = (tmp[i] == '.') ? ',' : tmp[i];
+    if (strLength >= sizeof(tmp)) {
+        strLength = sizeof(tmp) - 1;
     }
-    out[n] = '\0';
+
+    memcpy(tmp, str, strLength);
+    tmp[strLength] = '\0';
+
+    for (char *p = tmp; *p; ++p) {
+        if (*p == ',') *p = '.';
+    }
+
+    char *end = NULL;
+    double value = strtod(tmp, &end);
+    if (end == tmp) return 0.0;
+    return value;
 }
 
 
-static void set_display(Calc *calc, const char *text) {
+void format_number(char *outStr, size_t cap, double value) {
+    char tmpStr[128];
+    snprintf(tmpStr, sizeof(tmpStr), "%.15g", value);
+    size_t strLength = strlen(tmpStr);
+
+    if((strLength + 1) > cap) {
+        strLength = cap - 1;
+    }
+
+    for(size_t i=0; i< strLength; i++) {
+        if(tmpStr[i] == '.') {
+            outStr[i] = ',';
+        } else {
+            outStr[i] = tmpStr[i];
+        }
+    }
+
+    outStr[strLength] = '\0';
+}
+
+
+void set_display(Calc *calc, const char *text) {
     snprintf(calc->display, sizeof(calc->display), "%s", text);
 }
 
 
-static void append_digit(Calc *calc, char d) {
-    if (calc->enteringNew) { set_display(calc, "0"); calc->enteringNew = false; }
-    size_t len = strlen(calc->display);
-    if (len + 1 >= sizeof(calc->display)) return;
-    if (len == 1 && calc->display[0] == '0') {
-        calc->display[0] = d;
+void append_digit(Calc *calc, char value) {
+    if(calc->enteringNew) {
+        set_display(calc, "0");
+        calc->enteringNew = false;
+    }
+
+    size_t strLength = strlen(calc->display);
+
+    if((strLength + 1) >= sizeof(calc->display)) return;
+    if(strLength == 1 && calc->display[0] == '0') {
+        calc->display[0] = value;
         calc->display[1] = '\0';
     } else {
-        calc->display[len] = d;
-        calc->display[len + 1] = '\0';
+        calc->display[strLength] = value;
+        calc->display[strLength + 1] = '\0';
     }
 }
 
 
-static void append_comma(Calc *calc) {
-    if (calc->enteringNew) { set_display(calc, "0"); calc->enteringNew = false; }
-    if (strchr(calc->display, ',') != NULL) return;
-    size_t len = strlen(calc->display);
-    if (len + 1 >= sizeof(calc->display)) return;
-    calc->display[len] = ',';
-    calc->display[len + 1] = '\0';
+void append_comma(Calc *calc) {
+    if(calc->enteringNew) {
+        set_display(calc, "0");
+        calc->enteringNew = false;
+    }
+
+    if(strchr(calc->display, ',') != NULL) return;
+    size_t strLength = strlen(calc->display);
+    if((strLength + 1) >= sizeof(calc->display)) return;
+
+    calc->display[strLength] = ',';
+    calc->display[strLength + 1] = '\0';
 }
 
 
-static double eval(double left, double right, char op) {
+double eval(double left, double right, char op) {
     switch (op) {
         case '+': return left + right;
         case '-': return left - right;
@@ -99,6 +126,9 @@ void calc_press_digit(Calc *calc, char digit) {
 
 void calc_press_dot(Calc *calc) {
     append_comma(calc);
+
+    calc->enteringNew = false;
+    calc->lastWasEq   = false;
 }
 
 
@@ -146,6 +176,9 @@ void calc_press_eq(Calc *calc) {
 
 void calc_press_ac(Calc *calc) {
     calc_init(calc);
+
+    calc->enteringNew = true;
+    calc->lastWasEq   = false;
 }
 
 
@@ -162,15 +195,19 @@ void calc_press_sign(Calc *calc) {
         }
     }
 
+    calc->enteringNew = true;
+    calc->lastWasEq   = false;
 
 }
 
 
 void calc_press_pct(Calc *calc) {
-    double cur = parse_number(calc->display);
-    cur /= 100.0;
-    format_number(calc->display, sizeof(calc->display), cur);
+    double current = parse_number(calc->display);
+    current /= 100.0;
+    format_number(calc->display, sizeof(calc->display), current);
+
     calc->enteringNew = true;
+    calc->lastWasEq   = true; //Muss noch überarbeitet werden, je nach Funtion von Prozent
 }
 
 
@@ -182,14 +219,18 @@ void calc_press_backspace(Calc *calc) {
 
     if (calc->enteringNew) calc->enteringNew = false;
 
-    size_t len = strlen(calc->display);
-    if (len == 0) { set_display(calc, "0"); calc->enteringNew = true; return; }
+    size_t strLength = strlen(calc->display);
 
-    calc->display[len - 1] = '\0';
+    if (strLength == 0) { set_display(calc, "0"); calc->enteringNew = true; return; }
+
+    calc->display[strLength - 1] = '\0';
 
     if (calc->display[0] == '\0' || (calc->display[0] == '-' && calc->display[1] == '\0')) {
         set_display(calc, "0");
         calc->enteringNew = true;
         return;
     }
+
+    calc->enteringNew = true;
+    calc->lastWasEq   = false;
 }
