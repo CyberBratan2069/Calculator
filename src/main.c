@@ -12,37 +12,7 @@
 #include "button.h"
 #include "ui.h"
 
-/**
- * @brief The entry point for the calculator application.
- *
- * This function initializes the Raylib window and sets up a calculator interface with buttons
- * and design elements using a predefined theme. It processes user input, renders the interface,
- * and handles core calculator operations based on button interactions.
- *
- * The calculator supports operations such as addition, subtraction, multiplication, division,
- * percentage calculation, sign inversion, and backspace functionality. It also provides a clear
- * function ("AC") and displays the calculated result dynamically.
- *
- * @return Returns 0 on successful execution.
- *
- * @note The function uses the Raylib library to handle graphical window rendering and input,
- *       and relies on pre-defined functions and structs such as Theme, Button, and Calc to manage
- *       the application's logic and appearance.
- *
- * Function Workflow:
- * - Initialize the window and set target FPS (frames per second).
- * - Configure the calculator's visual theme using `ui_default_theme`.
- * - Initialize the calculator object (`Calc`) with default values using `calc_init`.
- * - Define buttons with unique properties such as label, bounds, base color, and text color.
- * - Begin a game-style rendering loop for continuous drawing and input handling:
- *   - Clear the screen with the background color.
- *   - Draw the calculator display.
- *   - Manage button actions:
- *     - Handle "AC" and "Back" conditions based on the display state.
- *     - Detect and process button presses for digits, operations, and control actions.
- *   - Use the appropriate functions (e.g., `calc_press_op`, `calc_press_digit`) to apply operations.
- * - Close the Raylib window after the loop exits.
- */
+
 int main(void) {
     InitWindow(400, 640, "Raylib Calculator");
     SetTargetFPS(60);
