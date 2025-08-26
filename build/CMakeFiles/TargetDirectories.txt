@@ -1,3 +1,0 @@
-/Users/khristianreizvikh/CLionProjects/Calculator/build/CMakeFiles/main.dir
-/Users/khristianreizvikh/CLionProjects/Calculator/build/CMakeFiles/edit_cache.dir
-/Users/khristianreizvikh/CLionProjects/Calculator/build/CMakeFiles/rebuild_cache.dir

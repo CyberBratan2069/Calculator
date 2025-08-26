@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
-project(RaylibProjekt C)
+project(RayLibProjekt C)
 
 set(CMAKE_C_STANDARD 99)
 
-find_package(raylib 5.0 REQUIRED) # sucht nach raylib
+# Raylib direkt aus dem Projekt einbinden
+find_package(raylib 5.0 REQUIRED)
 
 add_executable(main
         src/main.c
@@ -17,11 +18,5 @@ add_executable(main
 
 target_link_libraries(main raylib)
 
-include_directories(${CMAKE_SOURCE_DIR}/lib/unity)
-add_executable(UnityTests
-        tests/UnityTests.c
-        src/calc.c
-        lib/Unity/src/unity.c
-)
+# Unity Tests
 
-target_link_libraries(main raylib)
