@@ -8,9 +8,9 @@
 
 
 #include "../lib/Unity/src/unity.h"
-#include "../include/calc.h"
-#include "../include/button.h"
-#include "../include/ui.h"
+#include "../src/calc.h"
+#include "../src/button.h"
+#include "../src/ui.h"
 
 void setUp(){}
 void tearDown(){}
@@ -54,10 +54,10 @@ void test_calc_press_digit(void) {
 }
 
 
-void test_calc_press_dot(void) {
+void test_calc_press_comma(void) {
     Calc calc;
     calc_init(&calc);
-    calc_press_dot(&calc);
+    calc_press_comma(&calc);
     TEST_ASSERT_EQUAL_STRING("0,", calc.display);
 }
 
@@ -69,14 +69,16 @@ void test_calc_press_sign(void) {
     calc_press_digit(&calc, '5');
     calc_press_sign(&calc);
     TEST_ASSERT_EQUAL_STRING("-5", calc.display);
-
 }
+
+
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_calc_init);
     RUN_TEST(test_calc_press_digit);
-    RUN_TEST(test_calc_press_dot);
+    RUN_TEST(test_calc_press_comma);
+    RUN_TEST(test_calc_press_sign);
     return UNITY_END();
 }
 

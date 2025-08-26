@@ -9,8 +9,8 @@
 
 #include <string.h>
 #include "raylib.h"
-#include "../include/button.h"
-#include "../include/ui.h"
+#include "button.h"
+#include "ui.h"
 
 /**
  * @brief The entry point for the calculator application.

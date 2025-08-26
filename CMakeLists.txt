@@ -10,9 +10,9 @@ add_executable(main
         src/ui.c
         src/calc.c
         src/button.c
-        include/ui.h
-        include/button.h
-        include/calc.h
+        src/ui.h
+        src/button.h
+        src/calc.h
 )
 
 target_link_libraries(main raylib)
